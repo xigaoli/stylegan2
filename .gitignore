@@ -1,3 +1,4 @@
 /.stylegan2-cache/
 __pycache__/
 hand_imgs/hand/*
+hand_img_src/*
