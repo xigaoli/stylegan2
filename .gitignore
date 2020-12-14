@@ -2,3 +2,7 @@
 __pycache__/
 hand_imgs/hand/*
 hand_img_src/*
+results/*
+*.exe
+*.exp
+-test_nvcc.lib

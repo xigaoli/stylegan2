@@ -1,2 +1,6 @@
+#note: need tensorflow-gpu 1.15 -> CUDA 10, cudnn-10.0-windows10-x64-v7.6.2.24, and visual studio 2017
 python dataset_tool.py create_from_images .\hand_imgs\ .\hand_img_src\Hands\
-python run_training.py --num-gpus=1 --data-dir=.\hand_imgs --config=config-f --total-kimg=1000
+python run_training.py --num-gpus=1 --data-dir=.\hand_imgs --dataset=hand --config=config-f --total-kimg=1000
+#test if gpu is detected
+import tensorflow as tf
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))

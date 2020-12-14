@@ -106,9 +106,8 @@ def _fused_bias_act_cuda(x, b, axis, act, alpha, gain):
     b = tf.convert_to_tensor(b) if b is not None else empty_tensor
     act_spec = activation_funcs[act]
     # print(b.shape)
-    print(x.shape)
     assert  (b.shape[0] == 0 or b.shape[0] == x.shape[axis])
-    # assert b.shape[0] == 0 or 0 <= axis < x.shape.rank
+    assert b.shape[0] == 0 or 0 <= axis < x.shape.rank
     if alpha is None:
         alpha = act_spec.def_alpha
     if gain is None:
