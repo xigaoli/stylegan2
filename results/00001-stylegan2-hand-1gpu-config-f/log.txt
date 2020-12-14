@@ -1,0 +1,52 @@
+dnnlib: Running training.training_loop.training_loop() on localhost...
+Streaming data using training.dataset.TFRecordDataset...
+Dataset shape = [3, 256, 256]
+Dynamic range = [0, 255]
+Label size    = 0
+Constructing networks...
+(?, 512)
+Setting up TensorFlow plugin "fused_bias_act.cu": Preprocessing... Failed!
+Traceback (most recent call last):
+  File "run_training.py", line 192, in <module>
+    main()
+  File "run_training.py", line 187, in main
+    run(**vars(args))
+  File "run_training.py", line 120, in run
+    dnnlib.submit_run(**kwargs)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\submission\submit.py", line 343, in submit_run
+    return farm.submit(submit_config, host_run_dir)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\submission\internal\local.py", line 22, in submit
+    return run_wrapper(submit_config)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\submission\submit.py", line 280, in run_wrapper
+    run_func_obj(**submit_config.run_func_kwargs)
+  File "D:\Bravo\git_repos\stylegan2\training\training_loop.py", line 149, in training_loop
+    G = tflib.Network('G', num_channels=training_set.shape[0], resolution=training_set.shape[1], label_size=training_set.label_size, **G_args)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\network.py", line 97, in __init__
+    self._init_graph()
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\network.py", line 154, in _init_graph
+    out_expr = self._build_func(*self.input_templates, **build_kwargs)
+  File "D:\Bravo\git_repos\stylegan2\training\networks_stylegan2.py", line 186, in G_main
+    components.synthesis = tflib.Network('G_synthesis', func_name=globals()[synthesis_func], **kwargs)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\network.py", line 97, in __init__
+    self._init_graph()
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\network.py", line 154, in _init_graph
+    out_expr = self._build_func(*self.input_templates, **build_kwargs)
+  File "D:\Bravo\git_repos\stylegan2\training\networks_stylegan2.py", line 491, in G_synthesis_stylegan2
+    x = layer(x, layer_idx=0, fmaps=nf(1), kernel=3)
+  File "D:\Bravo\git_repos\stylegan2\training\networks_stylegan2.py", line 455, in layer
+    x = modulated_conv2d_layer(x, dlatents_in[:, layer_idx], fmaps=fmaps, kernel=kernel, up=up, resample_kernel=resample_kernel, fused_modconv=fused_modconv)
+  File "D:\Bravo\git_repos\stylegan2\training\networks_stylegan2.py", line 99, in modulated_conv2d_layer
+    s = apply_bias_act(s, bias_var=mod_bias_var) + 1 # [BI] Add bias (initially 1).
+  File "D:\Bravo\git_repos\stylegan2\training\networks_stylegan2.py", line 68, in apply_bias_act
+    return fused_bias_act(x, b=tf.cast(b, x.dtype), act=act, alpha=alpha, gain=gain)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\ops\fused_bias_act.py", line 68, in fused_bias_act
+    return impl_dict[impl](x=x, b=b, axis=axis, act=act, alpha=alpha, gain=gain)
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\ops\fused_bias_act.py", line 124, in _fused_bias_act_cuda
+    cuda_kernel = _get_plugin().fused_bias_act
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\ops\fused_bias_act.py", line 16, in _get_plugin
+    return custom_ops.get_plugin(os.path.splitext(__file__)[0] + '.cu')
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\custom_ops.py", line 111, in get_plugin
+    _run_cmd(_prepare_nvcc_cli('"%s" --preprocess -o "%s" --keep --keep-dir "%s"' % (cuda_file, tmp_file, tmp_dir)))
+  File "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\custom_ops.py", line 76, in _prepare_nvcc_cli
+    raise RuntimeError('Could not find MSVC/GCC/CLANG installation on this computer. Check compiler_bindir_search_path list in "%s".' % __file__)
+RuntimeError: Could not find MSVC/GCC/CLANG installation on this computer. Check compiler_bindir_search_path list in "D:\Bravo\git_repos\stylegan2\dnnlib\tflib\custom_ops.py".

@@ -498,10 +498,28 @@ def create_celeba(tfrecord_dir, celeba_dir, cx=89, cy=121):
             tfr.add_image(img)
 
 #----------------------------------------------------------------------------
+# self def crop img
+def resize_img(image_filename):
+    im = PIL.Image.open(image_filename)
+    # left = 100
+    # top = 0
+    # right = 700
+    # bottom = 600
+    im = im.resize((256, 256))
+    # im_crop = im.crop((left, top, right, bottom))
+    im.save(image_filename)    #overwrite
+    return
+#----------------------------------------------------------------------------
+
 
 def create_from_images(tfrecord_dir, image_dir, shuffle):
+    shuffle=True
     print('Loading images from "%s"' % image_dir)
     image_filenames = sorted(glob.glob(os.path.join(image_dir, '*')))
+    for img_fn in image_filenames:
+        resize_img(img_fn)
+    print("cropped all {} imgs.".format(len(image_filenames)),flush=True)
+
     if len(image_filenames) == 0:
         error('No input images found')
 
@@ -514,7 +532,8 @@ def create_from_images(tfrecord_dir, image_dir, shuffle):
         error('Input image resolution must be a power-of-two')
     if channels not in [1, 3]:
         error('Input images must be stored as RGB or grayscale')
-
+    print("start processing...",flush=True)
+    counter=0
     with TFRecordExporter(tfrecord_dir, len(image_filenames)) as tfr:
         order = tfr.choose_shuffled_order() if shuffle else np.arange(len(image_filenames))
         for idx in range(order.size):
@@ -524,6 +543,10 @@ def create_from_images(tfrecord_dir, image_dir, shuffle):
             else:
                 img = img.transpose([2, 0, 1]) # HWC => CHW
             tfr.add_image(img)
+            #set a limit
+            counter+=1
+            if(counter>=1000):
+                break
 
 #----------------------------------------------------------------------------
 

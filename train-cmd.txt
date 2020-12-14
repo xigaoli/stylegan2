@@ -1,0 +1,2 @@
+python dataset_tool.py create_from_images .\hand_imgs\ .\hand_img_src\Hands\
+python run_training.py --num-gpus=1 --data-dir=.\hand_imgs --config=config-f --total-kimg=1000

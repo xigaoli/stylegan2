@@ -159,7 +159,7 @@ def get_user_name():
     if _user_name_override is not None:
         return _user_name_override
     elif platform.system() == "Windows":
-        return os.getlogin()
+        return "drakeli"
     elif platform.system() == "Linux":
         try:
             import pwd
